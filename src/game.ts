@@ -3,6 +3,7 @@ export interface ActionType {
 }
 
 export class MineSweeper {
+  el: HTMLElement
   MAP_ROW: number
   MAP_COL: number
   MINE_CNT: number
@@ -10,14 +11,17 @@ export class MineSweeper {
   SAFE: number
   MAP: any
   constructor({
+    el,
     row = 10,
     col = 10,
     cnt = 7,
   }: {
+    el: HTMLElement
     row?: number
     col?: number
     cnt?: number
-  } = {}) {
+  }) {
+    this.el = el
     this.MAP_ROW = row
     this.MAP_COL = col
     this.MINE_CNT = cnt
@@ -25,6 +29,9 @@ export class MineSweeper {
     this.SAFE = 0
     this.MAP = this.generateMap()
     this.setMine(cnt)
+    this.el.classList.remove('mine-sweeper')
+    this.el.classList.add('mine-sweeper')
+    this.render()
   }
   set = value => value
   generateMap = () => {
@@ -38,8 +45,11 @@ export class MineSweeper {
     }
     return MAP
   }
-  resetMap = () => {
+  resetGame = () => {
     this.MAP = this.MAP.map(row => row.map(col => this.SAFE))
+    this.setMine(this.MINE_CNT)
+    this.el.removeChild(document.querySelector('.game-area'))
+    this.render()
   }
   setMine = (cnt: number) => {
     let random = max => Math.floor(Math.random() * 100) % max
@@ -61,12 +71,47 @@ export class MineSweeper {
     let boom = pattern.reduce((boom, row) => {
       boom = pattern.reduce((boom, col) => {
         if (row === 0 && col === 0) return boom
-        else if (this.mineCheck(x - col, y -row)) boom++
+        else if (this.mineCheck(x - col, y - row)) boom++
         return boom
       }, boom)
       return boom
     }, 0)
 
     return boom
+  }
+  render = () => {
+    let wrap = document.createElement('div')
+    wrap.className = 'game-area'
+    this.MAP.map((row, rowIndex) => {
+      let line = document.createElement('div')
+      line.className = 'game-line'
+      row.map((col, colIndex) => {
+        let block = document.createElement('div')
+        block.className = 'game-block'
+        block.innerText = 'click'
+        block.dataset['x'] = colIndex
+        block.dataset['y'] = rowIndex
+        block.dataset['gone'] = 'no'
+        block.addEventListener('click', (event: any) => {
+          if (block.dataset['gone'] === 'yes') return
+          let action = this.set(
+            this.mineSearch(
+              event.target.dataset['x'],
+              event.target.dataset['y']
+            )
+          )
+          block.classList.add('gone')
+          console.log(action)
+          block.dataset['gone'] = 'yes'
+          block.innerText = action
+          if (action === 'BOOM') {
+            if (confirm('BOOM!\n\nRegame?')) this.resetGame()
+          }
+        })
+        line.appendChild(block)
+      })
+      wrap.appendChild(line)
+    })
+    this.el.appendChild(wrap)
   }
 }
