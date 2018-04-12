@@ -83,7 +83,7 @@ export class MineSweeper {
   victory = () => {
     this.render({ result: true })
     setTimeout(() => {
-      if (confirm('VICTORY!\n\nRegame?')) {
+      if (confirm('VICTORY!\n\n새로운 게임을 하실래요?')) {
         this.inputParam()
         this.resetGame()
       }
@@ -92,7 +92,7 @@ export class MineSweeper {
   boom = () => {
     this.render({ result: true })
     setTimeout(() => {
-      if (confirm('BOOM!\n\nRegame?')) this.resetGame()
+      if (confirm('BOOM!\n\n다시 도전해볼까요?')) this.resetGame()
     }, 300)
   }
   mineClick = block => {
@@ -112,9 +112,9 @@ export class MineSweeper {
       if (isNaN(msg)) return promptCheck(message)
       return msg
     }
-    this.MAP_COL = promptCheck('Column')
-    this.MAP_ROW = promptCheck('Row')
-    this.MINE_CNT = promptCheck('Mines')
+    this.MAP_COL = promptCheck('Column을 입력해주세요. (number)')
+    this.MAP_ROW = promptCheck('Row를 입력해주세요. (number)')
+    this.MINE_CNT = promptCheck('설치 할 Mine 개수를 입력해주세요. (number)')
   }
   render = ({ result = false }: { result?: boolean } = { result }) => {
     for (let i = 0, len = this.el.childNodes.length; i < len; i++) {
