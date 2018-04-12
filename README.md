@@ -1,8 +1,9 @@
 # README
 
-## Run
-
+- Github page : [https://divlook.github.io/MineSweeper](https://divlook.github.io/MineSweeper)
 - DevServer : [http://localhost:3000](http://localhost:3000)
+
+## Run
 
 ```bash
 # DevServer
