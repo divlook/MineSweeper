@@ -17,6 +17,21 @@ const game = new MineSweeper({
   col: 8,
   row: 8,
 })
+app.appendChild(gameDom)
 console.table(game.MAP)
 
-app.appendChild(gameDom)
+// button
+const btnDom = document.createElement('div')
+btnDom.className = 'btn-area'
+const btnReset = document.createElement('button')
+btnReset.innerText = 'New Game'
+btnReset.addEventListener('click', () => game.resetGame())
+btnDom.appendChild(btnReset)
+const btnChange = document.createElement('button')
+btnChange.innerText = 'Map Change'
+btnChange.addEventListener('click', () => {
+  game.inputParam()
+  game.resetGame()
+})
+btnDom.appendChild(btnChange)
+header.appendChild(btnDom)
