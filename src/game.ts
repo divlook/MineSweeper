@@ -82,17 +82,10 @@ export class MineSweeper {
     return boom
   }
   victory = () => {
-    let msgCheck = (message: string) => {
-      let msg = Number(prompt(message))
-      if (isNaN(msg)) {
-        return msgCheck(message)
-      }
-      return msg
-    }
     if (confirm('VICTORY!\n\nRegame?')) {
-      this.MAP_COL = msgCheck('Column')
-      this.MAP_ROW = msgCheck('Row')
-      this.MINE_CNT = msgCheck('Mines')
+      this.MAP_COL = this.promptCheck('Column')
+      this.MAP_ROW = this.promptCheck('Row')
+      this.MINE_CNT = this.promptCheck('Mines')
       this.resetGame()
     }
   }
@@ -105,6 +98,11 @@ export class MineSweeper {
     this.MAP_REMAIN--
     if (action === 'BOOM' && confirm('BOOM!\n\nRegame?')) this.resetGame()
     else if (this.MAP_REMAIN <= this.MINE_CNT) this.victory()
+  }
+  promptCheck = (message: string) => {
+    let msg = Number(prompt(message))
+    if (isNaN(msg)) return this.promptCheck(message)
+    return msg
   }
   render = () => {
     let wrap = document.createElement('div')
