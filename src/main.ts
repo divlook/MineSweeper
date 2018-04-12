@@ -1,4 +1,9 @@
-import { NODE_ENV } from '../config/env'
+import * as env from '../config/env'
 
-console.log(`Main Test ${NODE_ENV}`)
-console.log('Hot!!')
+let envDom = document.createElement('div')
+for (let key in env) {
+  let p = document.createElement('p')
+  p.innerText = `${key} = ${env[key]}`
+  envDom.appendChild(p)
+}
+document.querySelector('#app').appendChild(envDom)
