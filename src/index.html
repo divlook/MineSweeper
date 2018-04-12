@@ -5,6 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      color: #333;
+    }
+    header {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .game-area {
+      width: 100%;
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: #eaeaea;
+    }
+    .game-area > .game-line {
+      display: flex;
+      flex-flow: row wrap;
+      flex: 1;
+    }
+    .game-line > .game-block {
+      flex: 1;
+      cursor: pointer;
+      text-align: center;
+      height: 40px;
+      line-height: 40px;
+    }
+    .game-block:hover {
+      background-color: #333;
+      color: #fff;
+    }
+    .game-block.gone {
+      cursor: default;
+      background-color: #efefef;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
