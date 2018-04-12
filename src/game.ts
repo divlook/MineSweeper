@@ -50,7 +50,6 @@ export class MineSweeper {
     this.MAP = this.generateMap()
     this.MAP = this.MAP.map(row => row.map(col => this.SAFE))
     this.setMine(this.MINE_CNT)
-    this.el.removeChild(document.querySelector('.game-area'))
     this.render()
   }
   setMine = (cnt: number) => {
@@ -83,28 +82,41 @@ export class MineSweeper {
   }
   victory = () => {
     if (confirm('VICTORY!\n\nRegame?')) {
-      this.MAP_COL = this.promptCheck('Column')
-      this.MAP_ROW = this.promptCheck('Row')
-      this.MINE_CNT = this.promptCheck('Mines')
+      this.inputParam()
       this.resetGame()
     }
+  }
+  boom = () => {
+    this.render({ mode: 'boom' })
+    setTimeout(() => {
+      if (confirm('BOOM!\n\nRegame?')) this.resetGame()
+    }, 300)
   }
   mineClick = block => {
     if (block.dataset['gone'] === 'yes') return
     let action = this.mineSearch(block.dataset['x'], block.dataset['y'])
+    if (typeof action === 'string') block.classList.add('boom')
     block.classList.add('gone')
     block.dataset['gone'] = 'yes'
     block.innerText = String(action)
     this.MAP_REMAIN--
-    if (action === 'BOOM' && confirm('BOOM!\n\nRegame?')) this.resetGame()
+    if (action === 'BOOM') this.boom()
     else if (this.MAP_REMAIN <= this.MINE_CNT) this.victory()
   }
-  promptCheck = (message: string) => {
-    let msg = Number(prompt(message))
-    if (isNaN(msg)) return this.promptCheck(message)
-    return msg
+  inputParam = () => {
+    let promptCheck = (message: string) => {
+      let msg = parseInt(prompt(message))
+      if (isNaN(msg)) return promptCheck(message)
+      return msg
+    }
+    this.MAP_COL = promptCheck('Column')
+    this.MAP_ROW = promptCheck('Row')
+    this.MINE_CNT = promptCheck('Mines')
   }
-  render = () => {
+  render = ({ mode = null }: { mode?: string } = {}) => {
+    for (let i = 0, len = this.el.childNodes.length; i < len; i++) {
+      this.el.childNodes[i].remove()
+    }
     let wrap = document.createElement('div')
     wrap.className = 'game-area'
     this.MAP.map((row, rowIndex) => {
@@ -113,11 +125,18 @@ export class MineSweeper {
       row.map((col, colIndex) => {
         let block = document.createElement('div')
         block.className = 'game-block'
-        block.innerText = 'click'
-        block.dataset['x'] = String(colIndex)
-        block.dataset['y'] = String(rowIndex)
-        block.dataset['gone'] = 'no'
-        block.addEventListener('click', () => this.mineClick(block))
+        if (mode !== 'boom') {
+          block.innerText = 'click'
+          block.dataset['x'] = String(colIndex)
+          block.dataset['y'] = String(rowIndex)
+          block.dataset['gone'] = 'no'
+          block.addEventListener('click', () => this.mineClick(block))
+        } else {
+          let action = this.mineSearch(colIndex, rowIndex)
+          block.classList.add('gone')
+          if (typeof action === 'string') block.classList.add('boom')
+          block.innerText = String(action)
+        }
         line.appendChild(block)
       })
       wrap.appendChild(line)
