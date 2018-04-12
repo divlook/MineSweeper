@@ -1,6 +1,6 @@
 {
   "name": "minesweeper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Development Practice",
   "private": true,
   "scripts": {
@@ -9,7 +9,12 @@
     "predeploy": "PUBLIC_PATH='/MineSweeper' npm run build",
     "deploy": "gh-pages -d dist -o github"
   },
-  "keywords": ["minesweeper", "typescript", "es6", "webpack4"],
+  "keywords": [
+    "minesweeper",
+    "typescript",
+    "es6",
+    "webpack4"
+  ],
   "homepage": "https://divlook.github.io/MineSweeper",
   "author": "divlook",
   "license": "MIT",
