@@ -81,13 +81,16 @@ export class MineSweeper {
     return boom
   }
   victory = () => {
-    if (confirm('VICTORY!\n\nRegame?')) {
-      this.inputParam()
-      this.resetGame()
-    }
+    this.render({ result: true })
+    setTimeout(() => {
+      if (confirm('VICTORY!\n\nRegame?')) {
+        this.inputParam()
+        this.resetGame()
+      }
+    }, 300)
   }
   boom = () => {
-    this.render({ mode: 'boom' })
+    this.render({ result: true })
     setTimeout(() => {
       if (confirm('BOOM!\n\nRegame?')) this.resetGame()
     }, 300)
@@ -113,7 +116,7 @@ export class MineSweeper {
     this.MAP_ROW = promptCheck('Row')
     this.MINE_CNT = promptCheck('Mines')
   }
-  render = ({ mode = null }: { mode?: string } = {}) => {
+  render = ({ result = false }: { result?: boolean } = { result }) => {
     for (let i = 0, len = this.el.childNodes.length; i < len; i++) {
       this.el.childNodes[i].remove()
     }
@@ -125,7 +128,7 @@ export class MineSweeper {
       row.map((col, colIndex) => {
         let block = document.createElement('div')
         block.className = 'game-block'
-        if (mode !== 'boom') {
+        if (!result) {
           block.innerText = 'click'
           block.dataset['x'] = String(colIndex)
           block.dataset['y'] = String(rowIndex)
