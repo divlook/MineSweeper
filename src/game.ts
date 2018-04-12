@@ -1,6 +1,5 @@
-export interface ActionType {
-  result?: string
-}
+export type ActionType = string | number
+export type MapType = (string | number)[][]
 
 export class MineSweeper {
   el: HTMLElement
@@ -9,7 +8,7 @@ export class MineSweeper {
   MINE_CNT: number
   MINE: number
   SAFE: number
-  MAP: any
+  MAP: MapType
   constructor({
     el,
     row = 10,
@@ -33,8 +32,7 @@ export class MineSweeper {
     this.el.classList.add('mine-sweeper')
     this.render()
   }
-  set = value => value
-  generateMap = () => {
+  generateMap = (): MapType => {
     let MAP = []
     for (let row = 0; row < this.MAP_ROW; row++) {
       let MAP_ROW = []
@@ -64,7 +62,7 @@ export class MineSweeper {
     if (x < 0 || y < 0 || x >= this.MAP_COL || y >= this.MAP_ROW) return false
     return this.MAP[y][x] === this.MINE
   }
-  mineSearch = (x, y) => {
+  mineSearch = (x, y): ActionType => {
     if (this.mineCheck(x, y)) return 'BOOM'
 
     let pattern = [-1, 0, 1]
@@ -80,6 +78,7 @@ export class MineSweeper {
     return boom
   }
   render = () => {
+    let THIS = this
     let wrap = document.createElement('div')
     wrap.className = 'game-area'
     this.MAP.map((row, rowIndex) => {
@@ -89,23 +88,22 @@ export class MineSweeper {
         let block = document.createElement('div')
         block.className = 'game-block'
         block.innerText = 'click'
-        block.dataset['x'] = colIndex
-        block.dataset['y'] = rowIndex
+        block.dataset['x'] = String(colIndex)
+        block.dataset['y'] = String(rowIndex)
         block.dataset['gone'] = 'no'
-        block.addEventListener('click', (event: any) => {
+
+        block.addEventListener('click', function() {
           if (block.dataset['gone'] === 'yes') return
-          let action = this.set(
-            this.mineSearch(
-              event.target.dataset['x'],
-              event.target.dataset['y']
-            )
+          let action = THIS.mineSearch(
+            this.dataset['x'],
+            this.dataset['y']
           )
           block.classList.add('gone')
           console.log(action)
           block.dataset['gone'] = 'yes'
-          block.innerText = action
+          block.innerText = String(action)
           if (action === 'BOOM') {
-            if (confirm('BOOM!\n\nRegame?')) this.resetGame()
+            if (confirm('BOOM!\n\nRegame?')) THIS.resetGame()
           }
         })
         line.appendChild(block)
