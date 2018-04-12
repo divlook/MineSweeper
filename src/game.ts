@@ -5,6 +5,7 @@ export class MineSweeper {
   el: HTMLElement
   MAP_ROW: number
   MAP_COL: number
+  MAP_REMAIN: number
   MINE_CNT: number
   MINE: number
   SAFE: number
@@ -23,6 +24,7 @@ export class MineSweeper {
     this.el = el
     this.MAP_ROW = row
     this.MAP_COL = col
+    this.MAP_REMAIN = row * col
     this.MINE_CNT = cnt
     this.MINE = 1
     this.SAFE = 0
@@ -44,6 +46,8 @@ export class MineSweeper {
     return MAP
   }
   resetGame = () => {
+    this.MAP_REMAIN = this.MAP_COL * this.MAP_ROW
+    this.MAP = this.generateMap()
     this.MAP = this.MAP.map(row => row.map(col => this.SAFE))
     this.setMine(this.MINE_CNT)
     this.el.removeChild(document.querySelector('.game-area'))
@@ -77,8 +81,32 @@ export class MineSweeper {
 
     return boom
   }
+  victory = () => {
+    let msgCheck = (message: string) => {
+      let msg = Number(prompt(message))
+      if (isNaN(msg)) {
+        return msgCheck(message)
+      }
+      return msg
+    }
+    if (confirm('VICTORY!\n\nRegame?')) {
+      this.MAP_COL = msgCheck('Column')
+      this.MAP_ROW = msgCheck('Row')
+      this.MINE_CNT = msgCheck('Mines')
+      this.resetGame()
+    }
+  }
+  mineClick = block => {
+    if (block.dataset['gone'] === 'yes') return
+    let action = this.mineSearch(block.dataset['x'], block.dataset['y'])
+    block.classList.add('gone')
+    block.dataset['gone'] = 'yes'
+    block.innerText = String(action)
+    this.MAP_REMAIN--
+    if (action === 'BOOM' && confirm('BOOM!\n\nRegame?')) this.resetGame()
+    else if (this.MAP_REMAIN <= this.MINE_CNT) this.victory()
+  }
   render = () => {
-    let THIS = this
     let wrap = document.createElement('div')
     wrap.className = 'game-area'
     this.MAP.map((row, rowIndex) => {
@@ -91,21 +119,7 @@ export class MineSweeper {
         block.dataset['x'] = String(colIndex)
         block.dataset['y'] = String(rowIndex)
         block.dataset['gone'] = 'no'
-
-        block.addEventListener('click', function() {
-          if (block.dataset['gone'] === 'yes') return
-          let action = THIS.mineSearch(
-            this.dataset['x'],
-            this.dataset['y']
-          )
-          block.classList.add('gone')
-          console.log(action)
-          block.dataset['gone'] = 'yes'
-          block.innerText = String(action)
-          if (action === 'BOOM') {
-            if (confirm('BOOM!\n\nRegame?')) THIS.resetGame()
-          }
-        })
+        block.addEventListener('click', () => this.mineClick(block))
         line.appendChild(block)
       })
       wrap.appendChild(line)
