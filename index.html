@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Minesweeper</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      color: #333;
+    }
+    header {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .game-area {
+      width: 100%;
+      max-width: 900px;
+      margin: 40px auto;
+      background-color: #eaeaea;
+    }
+    .game-area > .game-line {
+      display: flex;
+      flex-flow: row wrap;
+      flex: 1;
+    }
+    .game-line > .game-block {
+      flex: 1;
+      cursor: pointer;
+      text-align: center;
+      height: 50px;
+      line-height: 50px;
+    }
+    .game-block:hover {
+      background-color: #333;
+      color: #fff;
+    }
+    .game-block.gone {
+      cursor: default;
+      background-color: #efefef;
+      color: #333;
+    }
+    .game-block.boom {
+      cursor: default;
+      background-color: red;
+      color: yellow;
+    }
+    .btn-area {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .btn-area button {
+      line-height: 20px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+<script type="text/javascript" src="/minesweeper.min.js"></script></body>
+</html>
