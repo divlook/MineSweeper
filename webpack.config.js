@@ -9,11 +9,11 @@ const resolve = pathname => path.resolve(__dirname, pathname)
 module.exports = {
   mode: env.NODE_ENV,
   entry: {
-    app: [resolve('./src/main.ts')],
+    minesweeper: [resolve('./src/main.ts')],
   },
   output: {
-    path: resolve('./build'),
-    filename: '[name].[chunkhash].js',
+    path: resolve('./dist'),
+    filename: '[name].min.js',
     publicPath: env.PUBLIC_PATH,
   },
   module: {
@@ -27,7 +27,7 @@ module.exports = {
   },
   plugins: [
     new webpack.EnvironmentPlugin(env),
-    new CleanWebpackPlugin(['build']),
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       title: 'Minesweeper',
       inject: true,

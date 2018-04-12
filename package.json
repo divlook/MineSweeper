@@ -1,17 +1,18 @@
 {
   "name": "minesweeper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Development Practice",
   "private": true,
   "scripts": {
-    "build": "PUBLIC_PATH='./' webpack",
+    "build": "webpack --mode production --display minimal",
     "dev": "node scripts/dev-server.js",
-    "predeploy": "PUBLIC_PATH='/minesweeper/' npm run build",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b master -d dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["minesweeper", "typescript", "es6", "webpack4"],
+  "homepage": "https://divlook.github.io/minesweeper",
+  "author": "divlook",
+  "license": "MIT",
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
     "gh-pages": "^1.1.0",
