@@ -1,10 +1,11 @@
 const webpackDevServer = require('webpack-dev-server')
 const webpack = require('webpack')
-
-const HOST = process.env.HOST || 'localhost'
-const PORT = process.env.PORT || 3000
-
 const config = require('../webpack.config.js')
+const env = require('../config/env')
+
+const HOST = env.HOST
+const PORT = env.PORT
+
 config.output.filename = '[name].[hash].js'
 config.plugins.push(new webpack.HotModuleReplacementPlugin())
 
