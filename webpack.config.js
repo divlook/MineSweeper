@@ -13,7 +13,7 @@ module.exports = {
   },
   output: {
     path: resolve('./dist'),
-    filename: '[name].min.js',
+    filename: '[name].[chunkhash].js',
     publicPath: env.PUBLIC_PATH,
   },
   module: {
