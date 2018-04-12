@@ -31,7 +31,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Minesweeper',
       inject: true,
-      template: resolve('./public/index.html'),
+      template: resolve('./src/index.html'),
     }),
   ],
   optimization: {},
