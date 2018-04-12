@@ -13,9 +13,9 @@ app.appendChild(header)
 const gameDom = document.createElement('div')
 const game = new MineSweeper({
   el: gameDom,
-  cnt: 10,
-  col: 8,
-  row: 8,
+  cnt: 8,
+  col: 6,
+  row: 6,
 })
 app.appendChild(gameDom)
 console.table(game.MAP)
